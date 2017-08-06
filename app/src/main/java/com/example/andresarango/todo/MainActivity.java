@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.andresarango.todo.model.ToDoItem;
+import com.example.andresarango.todo.todo_adapter.ToDoAdapter;
 
 import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_POSITION;
 import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_TITLE;
