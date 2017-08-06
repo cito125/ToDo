@@ -13,10 +13,10 @@ public class ToDoItem {
         return mTitle;
     }
 
-    public static class ToDoItemBuilder{
+    public static class Builder {
         private final String title;
 
-        public ToDoItemBuilder(String title) {
+        public Builder(String title) {
             this.title = title;
         }
 

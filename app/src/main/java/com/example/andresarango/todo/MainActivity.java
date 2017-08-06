@@ -22,12 +22,5 @@ public class MainActivity extends AppCompatActivity {
         mToDoAdapter = new ToDoAdapter();
         mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mToDoRecyclerView.setAdapter(mToDoAdapter);
-
-        ToDoItem toDoListItem = new ToDoItem(mTitle);
-        toDoListItem.setmTitle("YEEEER");
-        mToDoAdapter.addToDoListItem(toDoListItem);
-
-
-
     }
 }
