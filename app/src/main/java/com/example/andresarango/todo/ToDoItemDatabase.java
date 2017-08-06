@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import static android.R.attr.version;
+import com.example.andresarango.todo.model.ToDoItem;
+
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 
 public class ToDoItemDatabase extends SQLiteOpenHelper {
@@ -16,13 +18,21 @@ public class ToDoItemDatabase extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+    static {
+        cupboard().register(ToDoItem.class);
+    }
 
+    public SQLiteDatabase getDatabase(){
+        return this.getWritableDatabase();
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        cupboard().withDatabase(sqLiteDatabase).createTables();
+    }
 
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        cupboard().withDatabase(sqLiteDatabase).upgradeTables();
     }
 }

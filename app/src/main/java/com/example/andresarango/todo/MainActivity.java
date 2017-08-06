@@ -2,6 +2,8 @@ package com.example.andresarango.todo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +16,12 @@ import android.widget.Toast;
 import com.example.andresarango.todo.model.ToDoItem;
 import com.example.andresarango.todo.todo_adapter.ToDoAdapter;
 
+import nl.qbusict.cupboard.QueryResultIterable;
+
+import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_ID;
 import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_POSITION;
 import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_TITLE;
+import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ToDoAdapter.OnClickListener {
 
@@ -24,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ToDoAdapter mToDoAdapter;
     private Button mAddItemButton;
     private EditText mAddItemEditText;
+    private SQLiteDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +40,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setTitle(getString(R.string.action_bar_title));
         }
 
+        ToDoItemDatabase databaseHelper = new ToDoItemDatabase(this);
+        mDatabase = databaseHelper.getWritableDatabase();
+
         initializeViews();
+        fillRecyclerView();
+    }
+
+    private void fillRecyclerView() {
+        Cursor toDoItemsCursor = cupboard().withDatabase(mDatabase).query(ToDoItem.class).getCursor();
+        try {
+            QueryResultIterable<ToDoItem> iterable = cupboard().withCursor(toDoItemsCursor).iterate(ToDoItem.class);
+            for (ToDoItem toDoItem : iterable) {
+                mToDoAdapter.addToDoListItem(toDoItem);
+            }
+        } finally {
+            toDoItemsCursor.close();
+        }
     }
 
     @Override
@@ -43,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String toastMessage = getString(R.string.toast_for_not_entering_to_do_item);
             Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
         } else {
-            mToDoAdapter.addToDoListItem(new ToDoItem(text));
+            addToDoItem(new ToDoItem(text));
         }
     }
 
@@ -52,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, EditItemActivity.class);
         intent.putExtra(TODO_ITEM_TITLE, toDoItem.getTitle());
         intent.putExtra(TODO_ITEM_POSITION, position);
+        intent.putExtra(EditItemActivity.TODO_ITEM_ID, toDoItem._id);
         startActivityForResult(intent, TODO_ITEM_REQUEST_CODE);
     }
 
@@ -63,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (position > -1) {
                 ToDoItem editedToDoItem = new ToDoItem(title);
+                editedToDoItem._id = data.getLongExtra(TODO_ITEM_ID, -10L);
+                cupboard().withDatabase(mDatabase).put(editedToDoItem);
                 mToDoAdapter.updateToDoListItemAtIndex(editedToDoItem, position);
             }
 
@@ -77,5 +103,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAddItemEditText = (EditText) findViewById(R.id.add_item_edit_text);
         mAddItemButton = (Button) findViewById(R.id.add_item_button);
         mAddItemButton.setOnClickListener(this);
+    }
+
+    private void addToDoItem(ToDoItem toDoItem) {
+        cupboard().withDatabase(mDatabase).put(toDoItem);
+        mToDoAdapter.addToDoListItem(toDoItem);
     }
 }

@@ -14,6 +14,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
 
     public static final String TODO_ITEM_TITLE = "Title of ToDo item";
     public static final String TODO_ITEM_POSITION = "Position of ToDo item in MainActivity.class recyclerview";
+    public static final String TODO_ITEM_ID = "ToDo Item id";
     private EditText mToDoEditText;
     private Button mToDoSaveButton;
 
@@ -54,6 +55,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent();
             intent.putExtra(TODO_ITEM_TITLE, newTitleForToDoItem);
             intent.putExtra(TODO_ITEM_POSITION, getIntent().getIntExtra(TODO_ITEM_POSITION, -10));
+            intent.putExtra(TODO_ITEM_ID, getIntent().getLongExtra(TODO_ITEM_ID, -10L));
             setResult(Activity.RESULT_OK, intent);
         }
         finish();
