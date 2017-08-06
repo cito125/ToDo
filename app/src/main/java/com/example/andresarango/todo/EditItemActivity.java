@@ -43,7 +43,7 @@ public class EditItemActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         String newTitleForToDoItem = mToDoEditText.getText().toString();
         if (newTitleForToDoItem.isEmpty()) {
-            String toastMessage = "Please add a to do Item.";
+            String toastMessage = getString(R.string.toast_for_not_entering_to_do_item);
             Toast.makeText(this, toastMessage, Toast.LENGTH_LONG).show();
             return;
         }
