@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.andresarango.todo.model.ToDoItem;
+
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView mToDoRecyclerView;
+    private ToDoAdapter mToDoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,9 +19,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.action_bar_title));
 
         mToDoRecyclerView = (RecyclerView) findViewById(R.id.to_do_recyclerview);
-
+        mToDoAdapter = new ToDoAdapter();
         mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mToDoRecyclerView.setAdapter(new ToDoRecyclerViewAdapter());
-
+        mToDoRecyclerView.setAdapter(mToDoAdapter);
     }
 }

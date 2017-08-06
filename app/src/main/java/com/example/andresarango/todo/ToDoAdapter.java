@@ -12,7 +12,7 @@ import com.example.andresarango.todo.model.ToDoItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ToDoRecyclerViewAdapter extends RecyclerView.Adapter<ToDoRecyclerViewAdapter.ToDoViewHolder> {
+public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder> {
 
     private final List<ToDoItem> mToDoList = new ArrayList<>();
 
