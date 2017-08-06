@@ -1,5 +1,7 @@
 package com.example.andresarango.todo;
 
+import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,6 +54,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onToDoItemClick(ToDoItem toDoItem, int position) {
-        Toast.makeText(getApplicationContext(), toDoItem.getTitle(), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, EditItemActivity.class);
+        intent.putExtra(EditItemActivity.TODO_ITEM_TITLE, toDoItem.getTitle());
+        intent.putExtra(EditItemActivity.TODO_ITEM_POSITION, position);
+        startActivity(intent);
     }
 }
