@@ -15,6 +15,11 @@ import java.util.List;
 public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder> {
 
     private final List<ToDoItem> mToDoList = new ArrayList<>();
+    private final OnClickListener mListener;
+
+    public ToDoAdapter(OnClickListener listener) {
+        mListener = listener;
+    }
 
     @Override
     public ToDoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -24,8 +29,14 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ToDoViewHolder holder, int position) {
+    public void onBindViewHolder(ToDoViewHolder holder, final int position) {
         holder.bind(mToDoList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onToDoItemClick(mToDoList.get(position),position);
+            }
+        });
     }
 
     @Override
@@ -33,15 +44,14 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
         return mToDoList.size();
     }
 
-    public void setToDoList(List<ToDoItem> toDoList){
-        mToDoList.clear();
-        mToDoList.addAll(toDoList);
-        notifyDataSetChanged();
-    }
-
-    public void addToDoListItem(ToDoItem toDoItem){
+    public void addToDoListItem(ToDoItem toDoItem) {
         mToDoList.add(toDoItem);
         notifyItemInserted(mToDoList.size() - 1);
+    }
+
+    public void updateToDoListItemAtIndex(ToDoItem toDoItem, int index) {
+        mToDoList.set(index, toDoItem);
+        notifyItemInserted(index);
     }
 
     public static class ToDoViewHolder extends RecyclerView.ViewHolder {
@@ -55,5 +65,9 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
         public void bind(ToDoItem toDoItem) {
             mToDoItemTextView.setText(toDoItem.getTitle());
         }
+    }
+
+    public interface OnClickListener {
+        void onToDoItemClick(ToDoItem toDoItem, int position);
     }
 }

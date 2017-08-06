@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.andresarango.todo.model.ToDoItem;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ToDoAdapter.OnClickListener {
 
     private RecyclerView mToDoRecyclerView;
     private ToDoAdapter mToDoAdapter;
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeViews() {
         mToDoRecyclerView = (RecyclerView) findViewById(R.id.to_do_recyclerview);
-        mToDoAdapter = new ToDoAdapter();
+        mToDoAdapter = new ToDoAdapter(this);
         mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mToDoRecyclerView.setAdapter(mToDoAdapter);
         mAddItemEditText = (EditText) findViewById(R.id.add_item_edittext);
@@ -42,11 +42,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         String text = mAddItemEditText.getText().toString();
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             String toastMessage = "Please add a to do Item.";
-            Toast.makeText(getApplicationContext(),toastMessage,Toast.LENGTH_LONG).show();
-        }else{
+            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_LONG).show();
+        } else {
             mToDoAdapter.addToDoListItem(new ToDoItem(text));
         }
+    }
+
+    @Override
+    public void onToDoItemClick(ToDoItem toDoItem, int position) {
+        Toast.makeText(getApplicationContext(), toDoItem.getTitle(), Toast.LENGTH_LONG).show();
     }
 }
