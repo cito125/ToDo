@@ -3,13 +3,26 @@ package com.example.andresarango.todo.model;
 
 public class ToDoItem {
 
-    private String mTitle;
+    private final String mTitle;
+
+    private ToDoItem(String title) {
+        mTitle = title;
+    }
 
     public String getTitle() {
         return mTitle;
     }
 
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
+    public static class ToDoItemBuilder{
+        private final String title;
+
+        public ToDoItemBuilder(String title) {
+            this.title = title;
+        }
+
+        public ToDoItem build(){
+            return new ToDoItem(title);
+        }
     }
+
 }
