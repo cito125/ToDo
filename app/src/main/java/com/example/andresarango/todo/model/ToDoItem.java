@@ -5,7 +5,7 @@ public class ToDoItem {
 
     private final String mTitle;
 
-    private ToDoItem(String title) {
+    public ToDoItem(String title) {
         mTitle = title;
     }
 
