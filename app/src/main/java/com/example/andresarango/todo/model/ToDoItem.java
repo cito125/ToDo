@@ -12,17 +12,4 @@ public class ToDoItem {
     public String getTitle() {
         return mTitle;
     }
-
-    public static class Builder {
-        private final String title;
-
-        public Builder(String title) {
-            this.title = title;
-        }
-
-        public ToDoItem build(){
-            return new ToDoItem(title);
-        }
-    }
-
 }
