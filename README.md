@@ -47,6 +47,10 @@ It was fun, I didn't implement a bunch of features but the way the app was made 
 
 **Answer:** I used a recyclerview so the adapter functioned as an object that did the binding of my `ToDoItem` objects to views. It's important to have object that map data to what is displayed on a screen because otherwise, what are we using apps for? I've never used a ListView but convertView is a method that allows one to reuse a view as you're scrolling for efficiency. I would suggest using a recyclerview : )
 
+## Notes
+
+I could have done a better job architecting the application.
+
 ## License
 
     Copyright [2017] [Andres Arango]
