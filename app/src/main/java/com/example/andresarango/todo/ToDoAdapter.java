@@ -29,12 +29,12 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ToDoViewHolder holder, final int position) {
+    public void onBindViewHolder(final ToDoViewHolder holder, final int position) {
         holder.bind(mToDoList.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onToDoItemClick(mToDoList.get(position),position);
+                mListener.onToDoItemClick(mToDoList.get(holder.getAdapterPosition()), holder.getAdapterPosition());
             }
         });
     }
@@ -51,7 +51,7 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder
 
     public void updateToDoListItemAtIndex(ToDoItem toDoItem, int index) {
         mToDoList.set(index, toDoItem);
-        notifyItemInserted(index);
+        notifyItemChanged(index);
     }
 
     public static class ToDoViewHolder extends RecyclerView.ViewHolder {

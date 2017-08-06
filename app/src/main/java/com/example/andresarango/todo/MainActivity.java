@@ -1,7 +1,7 @@
 package com.example.andresarango.todo;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +13,12 @@ import android.widget.Toast;
 
 import com.example.andresarango.todo.model.ToDoItem;
 
+import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_POSITION;
+import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_TITLE;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, ToDoAdapter.OnClickListener {
 
+    private static final int TODO_ITEM_REQUEST_CODE = 1;
     private RecyclerView mToDoRecyclerView;
     private ToDoAdapter mToDoAdapter;
     private Button mAddItemButton;
@@ -31,16 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initializeViews();
     }
 
-    private void initializeViews() {
-        mToDoRecyclerView = (RecyclerView) findViewById(R.id.to_do_recyclerview);
-        mToDoAdapter = new ToDoAdapter(this);
-        mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mToDoRecyclerView.setAdapter(mToDoAdapter);
-        mAddItemEditText = (EditText) findViewById(R.id.add_item_edittext);
-        mAddItemButton = (Button) findViewById(R.id.add_item_button);
-        mAddItemButton.setOnClickListener(this);
-    }
-
     @Override
     public void onClick(View v) {
         String text = mAddItemEditText.getText().toString();
@@ -55,8 +49,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onToDoItemClick(ToDoItem toDoItem, int position) {
         Intent intent = new Intent(this, EditItemActivity.class);
-        intent.putExtra(EditItemActivity.TODO_ITEM_TITLE, toDoItem.getTitle());
-        intent.putExtra(EditItemActivity.TODO_ITEM_POSITION, position);
-        startActivity(intent);
+        intent.putExtra(TODO_ITEM_TITLE, toDoItem.getTitle());
+        intent.putExtra(TODO_ITEM_POSITION, position);
+        startActivityForResult(intent, TODO_ITEM_REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TODO_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            String title = data.getStringExtra(TODO_ITEM_TITLE);
+            int position = data.getIntExtra(TODO_ITEM_POSITION, -1);
+
+            if (position > -1) {
+                ToDoItem editedToDoItem = new ToDoItem(title);
+                mToDoAdapter.updateToDoListItemAtIndex(editedToDoItem, position);
+            }
+
+        }
+    }
+
+    private void initializeViews() {
+        mToDoRecyclerView = (RecyclerView) findViewById(R.id.to_do_recyclerview);
+        mToDoAdapter = new ToDoAdapter(this);
+        mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mToDoRecyclerView.setAdapter(mToDoAdapter);
+        mAddItemEditText = (EditText) findViewById(R.id.add_item_edit_text);
+        mAddItemButton = (Button) findViewById(R.id.add_item_button);
+        mAddItemButton.setOnClickListener(this);
     }
 }
