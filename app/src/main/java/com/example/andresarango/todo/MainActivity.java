@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_POSITION;
 import static com.example.andresarango.todo.EditItemActivity.TODO_ITEM_TITLE;
 import static nl.qbusict.cupboard.CupboardFactory.cupboard;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ToDoAdapter.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ToDoAdapter.OnClickListener{
 
     private static final int TODO_ITEM_REQUEST_CODE = 1;
     private RecyclerView mToDoRecyclerView;
@@ -80,6 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onToDoItemRemoved(ToDoItem toDoItem) {
+        cupboard().withDatabase(mDatabase).delete(toDoItem);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TODO_ITEM_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String title = data.getStringExtra(TODO_ITEM_TITLE);
@@ -96,13 +102,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initializeViews() {
+        initializeRecyclewView();
+        mAddItemEditText = (EditText) findViewById(R.id.add_item_edit_text);
+        mAddItemButton = (Button) findViewById(R.id.add_item_button);
+        mAddItemButton.setOnClickListener(this);
+    }
+
+    private void initializeRecyclewView() {
         mToDoRecyclerView = (RecyclerView) findViewById(R.id.to_do_recyclerview);
         mToDoAdapter = new ToDoAdapter(this);
         mToDoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mToDoRecyclerView.setAdapter(mToDoAdapter);
-        mAddItemEditText = (EditText) findViewById(R.id.add_item_edit_text);
-        mAddItemButton = (Button) findViewById(R.id.add_item_button);
-        mAddItemButton.setOnClickListener(this);
+        ItemTouchHelper.SimpleCallback itemTouchCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                mToDoAdapter.removeToDoItem(position);
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemTouchCallBack);
+        itemTouchHelper.attachToRecyclerView(mToDoRecyclerView);
     }
 
     private void addToDoItem(ToDoItem toDoItem) {

@@ -54,7 +54,15 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoViewHolder> {
         notifyItemChanged(index);
     }
 
+    public void removeToDoItem(int position) {
+        mListener.onToDoItemRemoved(mToDoList.get(position));
+        mToDoList.remove(position);
+        notifyItemRemoved(position);
+    }
+
     public interface OnClickListener {
         void onToDoItemClick(ToDoItem toDoItem, int position);
+
+        void onToDoItemRemoved(ToDoItem toDoItem);
     }
 }
