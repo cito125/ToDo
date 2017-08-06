@@ -42,14 +42,10 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 **Question 1:** "What are your reactions to the Android app development platform so far? Compare and contrast Android's approach to layouts and user interfaces in past platforms you've used."
 
 **Answer:** 
-
+It was fun, I didn't implement a bunch of features but the way the app was made it should be fairly straightforward to add more features in the future. I enjoyed the development process, I was probably excessive in terms of making feature branches and such but I wanted to demonstrate a dependable development process. This project was cool because it allows for a lot of room for interpretaion.
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
-**Answer:** [Enter your answer here in a paragraph or two].
-
-## Notes
-
-Describe any challenges encountered while building the app.
+**Answer:** I used a recyclerview so the adapter functioned as an object that did the binding of my `ToDoItem` objects to views. It's important to have object that map data to what is displayed on a screen because otherwise, what are we using apps for? I've never used a ListView but convertView is a method that allows one to reuse a view as you're scrolling for efficiency. I would suggest using a recyclerview : )
 
 ## License
 
