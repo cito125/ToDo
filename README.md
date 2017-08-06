@@ -49,7 +49,7 @@ It was fun, I didn't implement a bunch of features but the way the app was made 
 
 ## Notes
 
-I could have done a better job architecting the application.
+I should have done a better job architecting the application.
 
 ## License
 
