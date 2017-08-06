@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         String text = mAddItemEditText.getText().toString();
         if(text.isEmpty()){
-            String toastMessage = "Please add a To Do Item.";
+            String toastMessage = "Please add a to do Item.";
             Toast.makeText(getApplicationContext(),toastMessage,Toast.LENGTH_LONG).show();
         }else{
             mToDoAdapter.addToDoListItem(new ToDoItem(text));
